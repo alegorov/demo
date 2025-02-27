@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider {
@@ -13,6 +14,12 @@ class AppServiceProvider extends ServiceProvider {
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);
         }
+
+        $this->app->register(CrudProvider::class);
+
+        Route::macro('crudResource', function ($name, $controllerClass) {
+            Route::prefix($name)->group(fn($router) => app()->make($controllerClass)->routes($router));
+        });
     }
 
     /**

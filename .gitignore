@@ -21,3 +21,10 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+.DS_Store
+*.local
+*.log*
+dist/
+/.phpstorm.meta.php
+/_ide_helper.php
+/_ide_helper_models.php
