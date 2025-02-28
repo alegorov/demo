@@ -1,5 +1,4 @@
 import {RawRouteComponent, RouteRecordRaw} from 'vue-router'
-import {CrudMode} from '@/component/schema'
 import {IModelInfo} from '@/utils/model-info'
 
 export default class CrudRouteBuilder {
@@ -39,9 +38,6 @@ export default class CrudRouteBuilder {
             path: 'add',
             component: component,
             name: `${this.modelInfo.NAME}-create`,
-            props: {
-                overrideMode: CrudMode.create,
-            },
         })
 
         return this
@@ -52,9 +48,6 @@ export default class CrudRouteBuilder {
             path: '',
             component: component,
             name: `${this.modelInfo.NAME}-list`,
-            props: {
-                modelInfo: this.modelInfo,
-            },
         })
 
         return this
@@ -70,9 +63,6 @@ export default class CrudRouteBuilder {
             path: `${this.modelInfo.PLURAL}/`,
             component: () => import('@/component/Nested.vue'),
             children: this.children,
-            props: {
-                name: this.modelInfo.PLURAL,
-            },
         }
     }
 }

@@ -47,6 +47,7 @@
             await api.post(`/${MODEL_INFO.DEMO.ENDPOINT}/generate`)
             router.push({name: `${MODEL_INFO.DEMO.NAME}-list`})
         } catch (e) {
+            console.error(e)
             if (e.response?.data?.message) {
                 snackbarErrorText.value = e.response?.data?.message
             } else {
@@ -67,6 +68,7 @@
         try {
             await api.post(`/${MODEL_INFO.DEMO.ENDPOINT}/clear`)
         } catch (e) {
+            console.error(e)
             if (e.response?.data?.message) {
                 snackbarErrorText.value = e.response?.data?.message
             } else {
