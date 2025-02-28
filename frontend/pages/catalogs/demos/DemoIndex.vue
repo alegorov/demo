@@ -13,7 +13,7 @@
         </template>
 
         <template #status="{record}">
-            {{ record.status }}
+            {{ ModelStatus[record.status] }}
         </template>
 
         <template #created_at="{record}">
@@ -31,8 +31,10 @@
     import CrudTable from '@/component/model/table/CrudTable.vue'
     import {MODEL_INFO} from '@/utils/model-info'
     import {FieldInfo} from '@/component/model/table/FieldInfo'
+    import {ModelStatus} from '@/component/model/ModelStatus'
 
     provide('modelInfo', MODEL_INFO.DEMO)
+
     provide('tableFields', <Array<FieldInfo>>[
         {name: 'id', title: 'ID'},
         {name: 'name', title: 'Name'},
