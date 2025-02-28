@@ -40,7 +40,11 @@ class ApiCrudController extends ApiController {
 
     public function list(Request $request) {
         $user = $request->user();
-        $params = [];
+
+        $params = [
+            'offset' => $request->get('offset'),
+            'limit'  => $request->get('limit'),
+        ];
 
         return $this->crud->shortcutList($user, $params);
     }

@@ -6,9 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 trait ShortcutConcern {
     public function shortcutList($user, array $params) {
-        return $this->makeQueryForListing()
-            ->orderBy('id')
-            ->get();
+        $query = $this->makeQueryForListing()->orderBy('id');
+
+        if (isset($params['offset'])) {
+            $query->offset(intval($params['offset']));
+        }
+
+        if (isset($params['limit'])) {
+            $query->limit(intval($params['limit']));
+        }
+
+        return $query->get();
     }
 
     public function shortcutCreate(Model $model, array $validData, $user) {
