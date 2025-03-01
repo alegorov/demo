@@ -75,12 +75,15 @@
 </template>
 
 <script setup lang="ts">
-    import {inject, onMounted, ref, Ref} from 'vue'
+    import {computed, inject, onMounted, ref, Ref, watch} from 'vue'
+    import {useRoute} from 'vue-router'
     import {FieldInfo} from '@/component/model/table/FieldInfo'
     import {IModelInfo} from '@/utils/model-info'
     import router from '@/router'
     import Spinner from '@/component/Spinner.vue'
     import api from '@/api'
+
+    const route = useRoute()
 
     const modelInfo = inject<IModelInfo>('modelInfo')!
     const tableFields = inject<Array<FieldInfo>>('tableFields')!
@@ -90,8 +93,10 @@
     const snackbarErrorText: Ref<string> = ref('')
     const records: Ref<Array<Record<string, any>>> = ref([])
 
-    const currentPage: Ref<number> = ref(1)
-    const pageCount: Ref<number> = ref(0)
+
+    const queryPage = computed<number | null>(() => route.query.page ? Math.max(Number(route.query.page), 1) : null)
+    const currentPage: Ref<number> = ref(queryPage.value ?? 1)
+    const pageCount: Ref<number> = ref(currentPage.value > 1 ? currentPage.value : 0)
     const pageSize = 10
 
 
@@ -116,8 +121,17 @@
 
                 const newPageCount = Math.floor((countResponse.data.count + pageSize - 1) / pageSize)
 
-                if (newPageCount > 0 && currentPage.value > newPageCount) {
+                if (newPageCount < 1) {
+                    currentPage.value = 1
+                    if (queryPage.value) {
+                        await router.push({name: `${modelInfo.NAME}-list`})
+                    }
+                } else if (currentPage.value > newPageCount) {
                     currentPage.value = newPageCount
+                    await router.push({
+                        name: `${modelInfo.NAME}-list`,
+                        query: {page: currentPage.value},
+                    })
                 }
 
                 pageCount.value = newPageCount
@@ -158,8 +172,21 @@
 
     function onPageChange(page: number) {
         currentPage.value = page
+
+        router.push({
+            name: `${modelInfo.NAME}-list`,
+            query: {page},
+        })
+
         fetchRecords(false)
     }
+
+    watch(queryPage, (page) => {
+        if (page && page !== currentPage.value) {
+            currentPage.value = page
+            fetchRecords()
+        }
+    })
 
     onMounted(async () => {
         await fetchRecords()
