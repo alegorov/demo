@@ -36,6 +36,8 @@ class ApiCrudController extends ApiController {
         $router->addRoute(['PUT', 'PATCH'], '{id}', [static::class, 'update'])
             ->where('id', '[0-9]+');
         $router->delete('{id}', [static::class, 'delete'])->where('id', '[0-9]+');
+        $router->get('google-sheet', [static::class, 'getGoogleSheet']);
+        $router->post('google-sheet', [static::class, 'setGoogleSheet']);
     }
 
     public function list(Request $request) {
@@ -138,5 +140,28 @@ class ApiCrudController extends ApiController {
         }
 
         return $model;
+    }
+
+    public function getGoogleSheet() {
+        $url = DB::table('google_sheets')
+            ->where('crud_service', get_class($this->crud))
+            ->pluck('url')
+            ->first();
+        return compact('url');
+    }
+
+    public function setGoogleSheet(Request $request) {
+        $validated = $request->validate([
+            'url' => 'nullable|string',
+        ]);
+
+        $query = DB::table('google_sheets');
+        $where = ['crud_service' => get_class($this->crud)];
+
+        if ($validated['url']) {
+            $query->updateOrInsert($where, ['url' => $validated['url']]);
+        } else {
+            $query->where($where)->delete();
+        }
     }
 }

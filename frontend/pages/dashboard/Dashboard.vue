@@ -1,6 +1,27 @@
 <template>
     <v-container>
         <v-row>
+            <v-text-field
+                v-model="googleSheet"
+                :disabled="loading"
+                class="ml-4"
+                label="Google Sheet"
+                density="compact"
+                variant="outlined"
+                autofocus
+            />
+
+            <v-btn
+                :loading="loading"
+                class="ml-4 mr-4"
+                prepend-icon="mdi-content-save"
+                @click="setGoogleSheet"
+            >
+                Save
+            </v-btn>
+        </v-row>
+
+        <v-row class="mt-4">
             <v-btn
                 :loading="loading"
                 class="ml-4"
@@ -28,14 +49,15 @@
 </template>
 
 <script setup lang="ts">
-    import {ref, Ref} from 'vue'
+    import {onMounted, ref, Ref} from 'vue'
     import api from '@/api'
     import {MODEL_INFO} from '@/utils/model-info'
     import router from '@/router'
 
-    const loading: Ref<boolean> = ref(false)
+    const loading: Ref<boolean> = ref(true)
     const snackbarError: Ref<boolean> = ref(false)
     const snackbarErrorText: Ref<string> = ref('')
+    const googleSheet: Ref<string> = ref('')
 
     async function generate() {
         if (loading.value) {
@@ -45,7 +67,7 @@
         loading.value = true
         try {
             await api.post(`${MODEL_INFO.DEMO.ENDPOINT}/generate`)
-            router.push({name: `${MODEL_INFO.DEMO.NAME}-list`})
+            await router.push({name: `${MODEL_INFO.DEMO.NAME}-list`})
         } catch (e) {
             console.error(e)
             if (e.response?.data?.message) {
@@ -79,4 +101,44 @@
             loading.value = false
         }
     }
+
+    async function setGoogleSheet() {
+        if (loading.value) {
+            return
+        }
+
+        loading.value = true
+        try {
+            await api.post(`${MODEL_INFO.DEMO.ENDPOINT}/google-sheet`, {
+                url: googleSheet.value,
+            })
+        } catch (e) {
+            console.error(e)
+            if (e.response?.data?.message) {
+                snackbarErrorText.value = e.response?.data?.message
+            } else {
+                snackbarErrorText.value = 'Error'
+            }
+            snackbarError.value = true
+        } finally {
+            loading.value = false
+        }
+    }
+
+    onMounted(async () => {
+        try {
+            const {data} = await api.get(`${MODEL_INFO.DEMO.ENDPOINT}/google-sheet`)
+            googleSheet.value = data.url ?? ''
+        } catch (e) {
+            console.error(e)
+            if (e.response?.data?.message) {
+                snackbarErrorText.value = e.response?.data?.message
+            } else {
+                snackbarErrorText.value = 'Error'
+            }
+            snackbarError.value = true
+        } finally {
+            loading.value = false
+        }
+    })
 </script>
