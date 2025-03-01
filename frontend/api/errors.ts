@@ -1,6 +1,4 @@
-import {LaravelResponseInterface} from '@/api/index'
-
-export function getValidationErrors(e: LaravelResponseInterface): Record<string, Array<string>> {
+export function getValidationErrors(e: any): Record<string, Array<string>> {
     const errors = e.response?.data?.errors
     if (!errors) {
         return {}

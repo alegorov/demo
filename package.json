@@ -10,7 +10,6 @@
   "dependencies": {
     "@mdi/font": "^7.4.47",
     "axios": "^1.7.9",
-    "json-form-data": "^1.7.2",
     "qs": "^6.14.0",
     "roboto-fontface": "^0.10.0",
     "vue": "^3.5.13",
@@ -22,7 +21,6 @@
     "@rsbuild/plugin-eslint": "^1.1.1",
     "@rsbuild/plugin-sass": "^1.2.2",
     "@rsbuild/plugin-vue": "^1.0.5",
-    "@types/json-form-data": "^1.7.5",
     "@types/qs": "^6.9.18",
     "@typescript-eslint/eslint-plugin": "^8.24.1",
     "@typescript-eslint/parser": "^8.24.1",

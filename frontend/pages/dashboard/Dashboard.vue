@@ -44,7 +44,7 @@
 
         loading.value = true
         try {
-            await api.post(`/${MODEL_INFO.DEMO.ENDPOINT}/generate`)
+            await api.post(`${MODEL_INFO.DEMO.ENDPOINT}/generate`)
             router.push({name: `${MODEL_INFO.DEMO.NAME}-list`})
         } catch (e) {
             console.error(e)
@@ -66,7 +66,7 @@
 
         loading.value = true
         try {
-            await api.post(`/${MODEL_INFO.DEMO.ENDPOINT}/clear`)
+            await api.post(`${MODEL_INFO.DEMO.ENDPOINT}/clear`)
         } catch (e) {
             console.error(e)
             if (e.response?.data?.message) {

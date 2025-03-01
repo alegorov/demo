@@ -16,7 +16,14 @@
             >
                 <thead>
                     <tr>
-                        <th style="min-width: 120px;"/>
+                        <th style="min-width: 120px;">
+                            <v-btn
+                                prepend-icon="mdi-plus-box-outline"
+                                @click="onCreate"
+                            >
+                                Add
+                            </v-btn>
+                        </th>
 
                         <th
                             v-for="field in tableFields"
@@ -114,10 +121,14 @@
         })
     }
 
+    function onCreate() {
+        router.push({name: `${modelInfo.NAME}-create`})
+    }
+
     async function fetchRecords(updatePageCount = true) {
         try {
             if (updatePageCount) {
-                const countResponse = await api.get(`/${modelInfo.ENDPOINT}/count`)
+                const countResponse = await api.get(`${modelInfo.ENDPOINT}/count`)
 
                 const newPageCount = Math.floor((countResponse.data.count + pageSize - 1) / pageSize)
 
@@ -137,7 +148,7 @@
                 pageCount.value = newPageCount
             }
 
-            const {data} = await api.get(`/${modelInfo.ENDPOINT}`, {
+            const {data} = await api.get(modelInfo.ENDPOINT, {
                 params: {
                     offset: (currentPage.value - 1) * pageSize,
                     limit: pageSize,
@@ -157,7 +168,7 @@
 
     async function deleteRecord(record: Record<string, any>) {
         try {
-            await api.delete(`/${modelInfo.ENDPOINT}/${record.id}`)
+            await api.delete(`${modelInfo.ENDPOINT}/${record.id}`)
             await fetchRecords()
         } catch (e) {
             console.error(e)
