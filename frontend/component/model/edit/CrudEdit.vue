@@ -47,7 +47,7 @@
     import Spinner from '@/component/Spinner.vue'
     import api from '@/api'
     import {getValidationErrors} from '@/api/errors'
-    import {IModelInfo} from '@/utils/model-info.ts'
+    import {IModelInfo} from '@/utils/model-info'
     import router from '@/router'
 
     const slots = Object.keys(useSlots())
@@ -118,9 +118,9 @@
                     snackbarErrorText.value = 'Error'
                 }
                 snackbarError.value = true
+            } finally {
+                loading.value = false
             }
-
-            loading.value = false
         }
     })
 </script>
