@@ -54,6 +54,7 @@
     import {MODEL_INFO} from '@/utils/model-info'
     import router from '@/router'
 
+    const modelInfo = MODEL_INFO.DEMO
     const loading: Ref<boolean> = ref(true)
     const snackbarError: Ref<boolean> = ref(false)
     const snackbarErrorText: Ref<string> = ref('')
@@ -66,8 +67,8 @@
 
         loading.value = true
         try {
-            await api.post(`${MODEL_INFO.DEMO.ENDPOINT}/generate`)
-            await router.push({name: `${MODEL_INFO.DEMO.NAME}-list`})
+            await api.post(`${modelInfo.ENDPOINT}/generate`)
+            await router.push({name: `${modelInfo.NAME}-list`})
         } catch (e) {
             console.error(e)
             if (e.response?.data?.message) {
@@ -88,7 +89,7 @@
 
         loading.value = true
         try {
-            await api.post(`${MODEL_INFO.DEMO.ENDPOINT}/clear`)
+            await api.post(`${modelInfo.ENDPOINT}/clear`)
         } catch (e) {
             console.error(e)
             if (e.response?.data?.message) {
@@ -109,7 +110,7 @@
 
         loading.value = true
         try {
-            await api.post(`${MODEL_INFO.DEMO.ENDPOINT}/google-sheet`, {
+            await api.post(`${modelInfo.ENDPOINT}/google-sheet`, {
                 url: googleSheet.value,
             })
         } catch (e) {
@@ -127,7 +128,7 @@
 
     onMounted(async () => {
         try {
-            const {data} = await api.get(`${MODEL_INFO.DEMO.ENDPOINT}/google-sheet`)
+            const {data} = await api.get(`${modelInfo.ENDPOINT}/google-sheet`)
             googleSheet.value = data.url ?? ''
         } catch (e) {
             console.error(e)

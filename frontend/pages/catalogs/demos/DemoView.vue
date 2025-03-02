@@ -69,8 +69,9 @@
     import {ModelStatus} from '@/api/types/ModelStatus'
     import IDemo from '@/api/types/IDemo'
 
+    const modelInfo = MODEL_INFO.DEMO
     const record: Reactive<IDemo> = reactive<Record<string, any>>({})
 
-    provide('modelInfo', MODEL_INFO.DEMO)
+    provide('modelInfo', modelInfo)
     provide('crudRecord', record)
 </script>

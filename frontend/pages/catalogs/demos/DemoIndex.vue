@@ -33,14 +33,17 @@
     import {FieldInfo} from '@/component/model/table/FieldInfo'
     import {ModelStatus} from '@/api/types/ModelStatus'
 
-    provide('modelInfo', MODEL_INFO.DEMO)
+    const modelInfo = MODEL_INFO.DEMO
 
-    provide('tableFields', <Array<FieldInfo>>[
+    const tableFields: Array<FieldInfo> = [
         {name: 'id', title: 'ID'},
         {name: 'name', title: 'Name'},
         {name: 'email', title: 'Email'},
         {name: 'status', title: 'Status'},
         {name: 'created_at', title: 'Created At'},
         {name: 'updated_at', title: 'Updated At'},
-    ])
+    ]
+
+    provide('modelInfo', modelInfo)
+    provide('tableFields', tableFields)
 </script>

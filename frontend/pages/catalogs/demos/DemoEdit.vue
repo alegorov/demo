@@ -41,10 +41,11 @@
     import {ModelStatus} from '@/api/types/ModelStatus'
     import IDemo from '@/api/types/IDemo.ts'
 
+    const modelInfo = MODEL_INFO.DEMO
     const record: Reactive<IDemo> = reactive<Record<string, any>>({})
     const errors: Ref<Record<string, Array<string>>> = ref({})
 
-    provide('modelInfo', MODEL_INFO.DEMO)
+    provide('modelInfo', modelInfo)
     provide('crudRecord', record)
     provide('crudErrors', errors)
 
