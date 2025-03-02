@@ -11,12 +11,12 @@ use RuntimeException;
 use Throwable;
 
 class ApiCrudController extends ApiController {
-
     protected CrudService $crud;
 
     public function __construct(CrudService $crudService = null) {
-        if (!$crudService && property_exists($this, 'crudServiceClass'))
-            $crudService = app()->make($this->crudServiceClass);
+        if (!$crudService && property_exists($this, 'crudServiceClass')) {
+            $crudService = app($this->crudServiceClass);
+        }
 
         if (!$crudService || !$crudService instanceof CrudService) {
             $controllerClass = class_basename(static::class);
@@ -152,7 +152,7 @@ class ApiCrudController extends ApiController {
 
     public function setGoogleSheet(Request $request) {
         $validated = $request->validate([
-            'url' => 'nullable|string',
+            'url' => 'nullable|string|regex:/\\/spreadsheets\\/d\\/[^\\/]+\\//',
         ]);
 
         $query = DB::table('google_sheets');

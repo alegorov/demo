@@ -2,10 +2,15 @@
 
 namespace App\Providers;
 
+use App\Services\GoogleSheetService;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider {
+    public $singletons = [
+        GoogleSheetService::class,
+    ];
+
     /**
      * Register any application services.
      */
