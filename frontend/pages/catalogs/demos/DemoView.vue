@@ -66,9 +66,10 @@
     import {provide, Reactive, reactive} from 'vue'
     import CrudView from '@/component/model/view/CrudView.vue'
     import {MODEL_INFO} from '@/utils/model-info'
-    import {ModelStatus} from '@/component/model/ModelStatus'
+    import {ModelStatus} from '@/api/types/ModelStatus'
+    import IDemo from '@/api/types/IDemo'
 
-    const record: Reactive<Record<string, any>> = reactive<Record<string, any>>({})
+    const record: Reactive<IDemo> = reactive<Record<string, any>>({})
 
     provide('modelInfo', MODEL_INFO.DEMO)
     provide('crudRecord', record)

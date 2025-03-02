@@ -38,9 +38,10 @@
     import {computed, provide, Reactive, reactive, ref, Ref} from 'vue'
     import CrudEdit from '@/component/model/edit/CrudEdit.vue'
     import {MODEL_INFO} from '@/utils/model-info'
-    import {ModelStatus} from '@/component/model/ModelStatus'
+    import {ModelStatus} from '@/api/types/ModelStatus'
+    import IDemo from '@/api/types/IDemo.ts'
 
-    const record: Reactive<Record<string, any>> = reactive<Record<string, any>>({})
+    const record: Reactive<IDemo> = reactive<Record<string, any>>({})
     const errors: Ref<Record<string, Array<string>>> = ref({})
 
     provide('modelInfo', MODEL_INFO.DEMO)

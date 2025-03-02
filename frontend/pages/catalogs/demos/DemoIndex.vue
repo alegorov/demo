@@ -31,7 +31,7 @@
     import CrudTable from '@/component/model/table/CrudTable.vue'
     import {MODEL_INFO} from '@/utils/model-info'
     import {FieldInfo} from '@/component/model/table/FieldInfo'
-    import {ModelStatus} from '@/component/model/ModelStatus'
+    import {ModelStatus} from '@/api/types/ModelStatus'
 
     provide('modelInfo', MODEL_INFO.DEMO)
 
