@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Crud\Service\CrudService;
+use App\Services\GoogleSheetService;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
@@ -163,5 +164,35 @@ class ApiCrudController extends ApiController {
         } else {
             $query->where($where)->delete();
         }
+    }
+
+    public function getGoogleSheetComments(GoogleSheetService $service, $count = null) {
+        $comments = [];
+        $spreadsheetId = $service->getSpreadsheetId(get_class($this->crud));
+
+        if ($spreadsheetId) {
+            $comments = $service->getComments($spreadsheetId, intval($count));
+        }
+
+        $body = '';
+
+        foreach ($comments as $id => $comment) {
+            $body .= $id . ' / ' . e($comment) . '<br/>';
+        }
+
+        $title = class_basename($this->crud->getModelClass());
+
+        return <<<HTML_CODE
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>$title Comments</title>
+</head>
+<body>
+    <p>$body</p>
+</body>
+</html>
+HTML_CODE;
     }
 }

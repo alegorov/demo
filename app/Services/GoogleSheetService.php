@@ -21,7 +21,7 @@ class GoogleSheetService {
         $this->service = new \Google_Service_Sheets($client);
     }
 
-    private function getSpreadsheetId(string $crudServiceClass): ?string {
+    public function getSpreadsheetId(string $crudServiceClass): ?string {
         $url = DB::table('google_sheets')
             ->where('crud_service', $crudServiceClass)
             ->pluck('url')
@@ -184,7 +184,8 @@ class GoogleSheetService {
         foreach ($data as $srcRow) {
             $row = [];
             foreach ($columns as $column) {
-                $row[] = strval($srcRow[$column] ?? '');
+                $value = trim(strval($srcRow[$column] ?? ''));
+                $row[] = strlen($value) ? $value : null;
             }
             $row[] = $comments[$srcRow['id']] ?? null;
             $rows[] = $row;
