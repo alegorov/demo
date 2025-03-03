@@ -112,7 +112,7 @@ class GoogleSheetService {
             return [];
         }
 
-        $bar = $output ? $output->createProgressBar($rowCount) : null;
+        $bar = $output?->createProgressBar($rowCount);
 
         $rowCount++;
 
