@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Crud\Service\CrudService;
+use Illuminate\Console\OutputStyle;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -50,7 +51,7 @@ class GoogleSheetService {
         }
     }
 
-    public function getIdAndCommentColumns(string $spreadsheetId): array {
+    private function getIdAndCommentColumns(string $spreadsheetId): array {
         $result = ['', ''];
 
         $spreadsheet = $this->service->spreadsheets->get($spreadsheetId);
@@ -93,7 +94,7 @@ class GoogleSheetService {
         return [$this->getNameFromNumber($idColumn), $this->getNameFromNumber($commentColumn)];
     }
 
-    public function getComments(string $spreadsheetId, int $limit = 0): array {
+    public function getComments(string $spreadsheetId, int $limit = 0, ?OutputStyle $output = null): array {
         [$idColumn, $commentColum] = $this->getIdAndCommentColumns($spreadsheetId);
 
         if (!$idColumn || !$commentColum) {
@@ -110,6 +111,8 @@ class GoogleSheetService {
         if ($rowCount < 1) {
             return [];
         }
+
+        $bar = $output ? $output->createProgressBar($rowCount) : null;
 
         $rowCount++;
 
@@ -135,6 +138,10 @@ class GoogleSheetService {
             $limit = count($idValues);
         }
 
+        if ($bar) {
+            $bar->start();
+        }
+
         foreach ($idValues as $i => $idRow) {
             $id = trim(strval($idRow[0] ?? ''));
             if (!strlen($id)) {
@@ -149,6 +156,14 @@ class GoogleSheetService {
                     break;
                 }
             }
+
+            if ($bar) {
+                $bar->advance();
+            }
+        }
+
+        if ($bar) {
+            $bar->finish();
         }
 
         return $result;
